@@ -46,3 +46,7 @@ next-env.d.ts
 # SQLite Local Database
 *.db
 *.db-journal
+
+# deployment
+/cpanel-deploy/
+*.zip
