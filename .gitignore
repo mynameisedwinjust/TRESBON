@@ -50,3 +50,5 @@ next-env.d.ts
 # deployment
 /cpanel-deploy/
 *.zip
+deploy_me.zip
+/src/src.zip
