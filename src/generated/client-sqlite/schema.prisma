@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client-sqlite"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  password      String?
+  fullName      String?
+  role          String         @default("customer") // admin, delivery, customer, cashier, cleaner, supervisor
+  branchId      String?
+  branch        Branch?        @relation(fields: [branchId], references: [id])
+  phone         String?
+  isActive      Boolean        @default(true)
+  managedBranch Branch?        @relation("BranchManager")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  customer      Customer?
+  driverTasks   DeliveryTask[] @relation("DriverTasks")
+
+  @@map("users")
+}
+
+model Branch {
+  id        String    @id @default(cuid())
+  name      String
+  address   String?
+  phone     String?
+  email     String?
+  managerId String?   @unique
+  manager   User?     @relation("BranchManager", fields: [managerId], references: [id])
+  isActive  Boolean   @default(true)
+  users     User[]
+  orders    Order[]
+  expenses  Expense[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("branches")
+}
+
+model Customer {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String?  @unique
+  phone              String?
+  address            String?
+  gender             String? // male, female, other
+  type               String   @default("regular") // regular, walk-in
+  loyaltyPoints      Int      @default(0)
+  discountPercentage Float    @default(0)
+  orders             Order[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  userId             String?  @unique
+  user               User?    @relation(fields: [userId], references: [id])
+
+  @@map("customers")
+}
+
+model Service {
+  id          String        @id @default(cuid())
+  name        String
+  type        String // washing, dry_cleaning, ironing, folding, stain_removal
+  basePrice   Float
+  description String?
+  isActive    Boolean       @default(true)
+  items       ServiceItem[]
+  orderItems  OrderItem[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("services")
+}
+
+model ServiceItem {
+  id          String   @id @default(cuid())
+  name        String
+  price       Float
+  description String?
+  serviceId   String
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("service_items")
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  orderNumber    String        @unique
+  customerId     String?
+  customer       Customer?     @relation(fields: [customerId], references: [id])
+  branchId       String?
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  status         String        @default("received") // received, accepted, in_process, ready, delivered, cancelled
+  totalAmount    Float
+  paidAmount     Float         @default(0)
+  deliveryFee    Float         @default(0)
+  discountAmount Float         @default(0)
+  notes          String?
+  receivedAt     DateTime?
+  readyAt        DateTime?
+  deliveredAt    DateTime?
+  items          OrderItem[]
+  payments       Payment[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deliveryTask   DeliveryTask?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id                   String   @id @default(cuid())
+  orderId              String
+  order                Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  serviceId            String?
+  service              Service? @relation(fields: [serviceId], references: [id])
+  itemName             String
+  quantity             Int      @default(1)
+  unitPrice            Float
+  totalPrice           Float
+  preCleaningPhotoUrl  String?
+  postCleaningPhotoUrl String?
+  barcode              String?
+  qrCode               String?
+  createdAt            DateTime @default(now())
+
+  @@map("order_items")
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount        Float
+  method        String // cash, mobile_money
+  status        String   @default("pending") // pending, completed, failed, refunded
+  transactionId String?
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@map("payments")
+}
+
+model DeliveryTask {
+  id            String    @id @default(cuid())
+  orderId       String    @unique
+  order         Order     @relation(fields: [orderId], references: [id])
+  assignedTo    String?
+  assigned_user User?     @relation("DriverTasks", fields: [assignedTo], references: [id])
+  type          String // pickup, delivery
+  address       String?
+  phone         String?
+  status        String    @default("pending") // pending, in_transit, completed, cancelled
+  scheduledAt   DateTime?
+  completedAt   DateTime?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("delivery_tasks")
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  amount      Float
+  category    String? // e.g., Electricity, Rent, Detergents, Water, Salaries, Fuel, Others
+  date        DateTime @default(now())
+  branchId    String?
+  branch      Branch?  @relation(fields: [branchId], references: [id])
+  recordedBy  String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("expenses")
+}

@@ -1,0 +1,38 @@
+<svg width="32" height="32" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Clothes Hanger - Blue, house-like shape with hook -->
+  <path
+    d="M50 10 L30 35 L20 55 L25 65 L30 70 L50 75 L70 70 L75 65 L80 55 L70 35 Z"
+    fill="#3b82f6"
+    stroke="#3b82f6"
+    strokeWidth="1"
+  />
+  
+  <!-- Hook - Curved hook at the top center, question mark-like -->
+  <path
+    d="M50 10 Q50 5 45 5 Q40 5 40 10"
+    stroke="#3b82f6"
+    strokeWidth="2.5"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+  
+  <!-- Four-pointed stars - Green and blue, scattered on right side -->
+  <!-- Green star 1 -->
+  <path
+    d="M75 25 L76 28 L79 28 L76.5 30 L77.5 33 L75 31 L72.5 33 L73.5 30 L71 28 L74 28 Z"
+    fill="#22c55e"
+  />
+  
+  <!-- Green star 2 -->
+  <path
+    d="M80 40 L81 43 L84 43 L81.5 45 L82.5 48 L80 46 L77.5 48 L78.5 45 L76 43 L79 43 Z"
+    fill="#22c55e"
+  />
+  
+  <!-- Blue star -->
+  <path
+    d="M78 15 L79 18 L82 18 L79.5 20 L80.5 23 L78 21 L75.5 23 L76.5 20 L74 18 L77 18 Z"
+    fill="#3b82f6"
+  />
+</svg>
