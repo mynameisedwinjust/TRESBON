@@ -1,6 +1,5 @@
 require('dotenv').config()
 const { PrismaClient } = require('../src/generated/client')
-
 const bcrypt = require('bcryptjs')
 
 const prisma = new PrismaClient()
@@ -9,38 +8,23 @@ async function main() {
     console.log('🌱 Starting database seed...')
 
     // 1. Create Default Admin User
-    const adminEmail = 'admin@tresbon.com'
+    const adminPhone = '0790002060'
     const hashedPassword = await bcrypt.hash('admin123', 10)
 
     const admin = await prisma.user.upsert({
-        where: { email: adminEmail },
+        where: { phone: adminPhone },
         update: {},
         create: {
-            email: adminEmail,
+            phone: adminPhone,
             password: hashedPassword,
             fullName: 'TrèsBon Admin',
             role: 'admin',
             isActive: true,
         },
     })
-    console.log(`✅ Admin user created: ${admin.email}`)
+    console.log(`✅ Admin user created: ${admin.phone}`)
 
-    // 2. Create Default Branch
-    const branch = await prisma.branch.upsert({
-        where: { id: 'main-branch' }, // Placeholder ID for seeding
-        update: {},
-        create: {
-            id: 'main-branch',
-            name: 'Main Branch',
-            address: 'Kicukiro Center, Kigali, Rwanda',
-            phone: '+250 790 002 060',
-            email: 'tresbondrycleaners01@gmail.com',
-            managerId: admin.id,
-        },
-    })
-    console.log(`✅ Default branch created: ${branch.name}`)
-
-    // 3. Create Default Services
+    // 2. Create Default Services
     const services = [
         { name: "Advanced stain removal", type: "stain_removal", basePrice: 0, description: "Specialized treatment for tough stains" },
         { name: "Wedding gowns and special garment care", type: "dry_cleaning", basePrice: 0, description: "Specialized care for wedding gowns, umushanana, and delicate garments" },

@@ -26,10 +26,18 @@ export const metadata: Metadata = {
   title: "Très Bon Professional Laundry - Premium Laundry Services",
   description: "Professional laundry and dry cleaning services for your family.",
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Très Bon",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
-    icon: '/tresbon-official-logo.png',
-    shortcut: '/tresbon-official-logo.png',
-    apple: '/tresbon-official-logo.png',
+    icon: '/icon-192.png',
+    shortcut: '/icon-192.png',
+    apple: '/icon-192.png',
   },
 }
 
@@ -38,6 +46,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  userScalable: false,
 }
 
 

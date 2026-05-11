@@ -39,7 +39,13 @@ if (Test-Path "prisma") {
     Copy-Item -Recurse -Force "prisma" "$deployFolder/"
 }
 
-# 7. Create the ZIP file
+# 7. Copy Environment file
+if (Test-Path ".env.production") {
+    Write-Host "--- Adding Production Environment File ---" -ForegroundColor Cyan
+    Copy-Item -Force ".env.production" "$deployFolder/.env"
+}
+
+# 8. Create the ZIP file
 $zipFile = "deploy_me.zip"
 if (Test-Path $zipFile) {
     Remove-Item $zipFile

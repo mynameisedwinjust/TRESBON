@@ -11,9 +11,7 @@
     "build": "next build",
     "build:clean": "node scripts/clean-build.js && next build",
     "start": "next start",
-    "lint": "next lint",
-    "migrate": "node scripts/migrate-to-mongodb.js",
-    "test-mongodb": "node setup-mongodb.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
@@ -36,7 +34,6 @@
     "jspdf-autotable": "^5.0.7",
     "lucide-react": "^0.344.0",
     "mammoth": "^1.12.0",
-    "mongodb": "^7.0.0",
     "next": "^14.2.35",
     "next-auth": "^4.24.13",
     "next-themes": "^0.2.1",
